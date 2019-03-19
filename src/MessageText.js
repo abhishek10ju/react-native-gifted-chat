@@ -67,6 +67,7 @@ export default class MessageText extends React.Component {
   }
 
   render() {
+    console.log('this.props.position', this.props.position, this.props.textStyle, this.props.useHTMLView);
     const linkStyle = StyleSheet.flatten([styles[this.props.position].link, this.props.linkStyle[this.props.position]]);
     return (
       <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
