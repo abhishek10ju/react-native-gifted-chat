@@ -5,6 +5,7 @@ import { Linking, StyleSheet, Text, View, ViewPropTypes } from 'react-native';
 
 import ParsedText from 'react-native-parsed-text';
 import Communications from 'react-native-communications';
+import HTMLView from 'react-native-htmlview';
 
 const WWW_URL_PATTERN = /^www\./i;
 
@@ -69,22 +70,36 @@ export default class MessageText extends React.Component {
     const linkStyle = StyleSheet.flatten([styles[this.props.position].link, this.props.linkStyle[this.props.position]]);
     return (
       <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-        <ParsedText
-          style={[
-            styles[this.props.position].text,
-            this.props.textStyle[this.props.position],
-            this.props.customTextStyle,
-          ]}
-          parse={[
-            ...this.props.parsePatterns(linkStyle),
-            { type: 'url', style: linkStyle, onPress: this.onUrlPress },
-            { type: 'phone', style: linkStyle, onPress: this.onPhonePress },
-            { type: 'email', style: linkStyle, onPress: this.onEmailPress },
-          ]}
-          childrenProps={{ ...this.props.textProps }}
-        >
-          {this.props.currentMessage.text}
-        </ParsedText>
+       {this.props.useHTMLView ? (
+          <HTMLView
+            stylesheet={htmlViewStyles}
+            textComponentProps={{
+              style: [
+                styles[this.props.position].text,
+                this.props.textStyle[this.props.position],
+                this.props.customTextStyle
+              ]
+            }}
+            value={`<body>${this.props.currentMessage.text}</body>`}
+          />
+        ) : (
+          <ParsedText
+            style={[
+              styles[this.props.position].text,
+              this.props.textStyle[this.props.position],
+              this.props.customTextStyle
+            ]}
+            parse={[
+              ...this.props.parsePatterns(linkStyle),
+              { type: 'url', style: linkStyle, onPress: this.onUrlPress },
+              { type: 'phone', style: linkStyle, onPress: this.onPhonePress },
+              { type: 'email', style: linkStyle, onPress: this.onEmailPress }
+            ]}
+            childrenProps={{ ...this.props.textProps }}
+          >
+            {this.props.currentMessage.text}
+          </ParsedText>
+        )}
       </View>
     );
   }
