@@ -43,7 +43,7 @@ class GiftedChat extends React.Component {
 
   constructor(props) {
     super(props);
-
+    alert('test');
     // default values
     this._isMounted = false;
     this._keyboardHeight = 0;
